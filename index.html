@@ -165,6 +165,9 @@ document.addEventListener("fullscreenchange", () => {
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("orientationchange", checkOrientation);
     checkOrientation();
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log("✅ beforeinstallprompt fired");
+});
 
     // Unity loader
     var buildUrl = "Build";
