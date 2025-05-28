@@ -189,30 +189,35 @@ document.addEventListener("fullscreenchange", () => {
         alert(message);
       });
     };
-    document.body.appendChild(script);
-	if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
-    }
+	let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
 
-    // Desktop PWA install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'block';
-    });
+// Listen for installable event
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'inline-flex'; // Make it visible
+  console.log("Install prompt available");
+});
 
-    installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          }
-          deferredPrompt = null;
-          installBtn.style.display = 'none';
-        });
+// On click, show the prompt
+installBtn.addEventListener('click', () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted install');
+      } else {
+        console.log('User dismissed install');
       }
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
     });
+  }
+});
+
+    document.body.appendChild(script);
+	
   </script>
 </body>
 </html>
