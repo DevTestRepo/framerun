@@ -5,15 +5,14 @@
   <title>The Frame Run</title>
   <link rel="shortcut icon" href="TemplateData/Icon.png">
   <link rel="manifest" href="manifest.json">
- 
- <style>
+
+  <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
-    
     }
 
     #unity-container {
@@ -31,10 +30,7 @@
       top: 0;
       left: 0;
     }
-     /* ✅ Splash Background */
-   
 
-    /* 🌐 شاشة الروتيشن */
     #RotateWarningScreen {
       display: none;
       position: absolute;
@@ -53,7 +49,6 @@
       max-width: 200px;
     }
 
-    /* 🟨 شاشة الفول سكرين */
     #FullscreenPrompt {
       display: none;
       position: absolute;
@@ -61,7 +56,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #000; /* أو حط صورة */
+      background-color: #000;
       z-index: 9998;
       display: flex;
       flex-direction: column;
@@ -71,13 +66,13 @@
       color: white;
     }
 
-   #FullscreenPrompt img.logo {
-  width: 80%;
-  max-width: 600px;
-  height: auto;
-  margin-bottom: 60px;
-  object-fit: contain;
-}
+    #FullscreenPrompt img.logo {
+      width: 80%;
+      max-width: 600px;
+      height: auto;
+      margin-bottom: 60px;
+      object-fit: contain;
+    }
 
     #fullscreen-prompt-box {
       position: absolute;
@@ -100,7 +95,8 @@
     #fullscreen-prompt-box img:hover {
       transform: scale(1.1);
     }
-	#installBtn {
+
+    #installBtn {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -123,7 +119,8 @@
       margin-right: 8px;
     }
 
-     #LoadingSplash {
+    #LoadingSplash {
+      display: none;
       position: absolute;
       top: 0;
       left: 0;
@@ -134,7 +131,6 @@
       background-size: cover;
     }
 
-    /* ✅ Loading Text */
     #loading-text {
       position: absolute;
       bottom: 150px;
@@ -145,7 +141,6 @@
       text-shadow: 1px 1px 2px black;
     }
 
-    /* ✅ Stylized Loading Bar */
     #custom-loading-bar {
       position: absolute;
       bottom: 60px;
@@ -167,105 +162,151 @@
       border-radius: 12px 0 0 12px;
       transition: width 0.3s ease;
     }
-
   </style>
 </head>
 
 <body>
- <!-- ✅ Splash Screen with Loading -->
-  
-  <!-- ✅ شاشة الروتيشن Portrait فقط -->
+
   <div id="RotateWarningScreen">
     <img src="TemplateData/lg.png" alt="Rotate your device">
   </div>
 
-  <!-- ✅ شاشة الفول سكرين Landscape فقط -->
   <div id="FullscreenPrompt">
     <img src="TemplateData/fullscreen.png" alt="Logo" class="logo">
     <div id="fullscreen-prompt-box">
       <img src="TemplateData/Ficon.png" alt="Enter Fullscreen" onclick="goFullscreen()">
-     
-	 
-	  
       <span>For the best gaming experience, switch to full screen.</span>
     </div>
   </div>
 
-
-<div id="LoadingSplash">
+  <div id="LoadingSplash">
     <div id="loading-text"></div>
     <div id="custom-loading-bar">
       <div id="custom-loading-bar-fill"></div>
     </div>
   </div>
-  <!-- ✅ Unity Canvas -->
+
   <div id="unity-container">
     <canvas id="unity-canvas"></canvas>
   </div>
-<button id="installBtn">
+
+  <button id="installBtn">
     <img src="TemplateData/install-icon.png" alt="Install">
     Install The App
   </button>
-  <!-- ✅ Unity Loader Script -->
+
   <script>
-    
     const rotateScreen = document.getElementById("RotateWarningScreen");
     const fullscreenPrompt = document.getElementById("FullscreenPrompt");
-     const splash = document.querySelector("#LoadingSplash");
-    const barFill = document.querySelector("#custom-loading-bar-fill");
+    const splash = document.getElementById("LoadingSplash");
+    const barFill = document.getElementById("custom-loading-bar-fill");
+
+    const canvas = document.getElementById("unity-canvas");
+    const installBtn = document.getElementById("installBtn");
+    let deferredPrompt;
 
     function checkOrientation() {
       if (window.innerHeight > window.innerWidth) {
-        rotateScreen.style.display = "flex";       // Show rotate
-        fullscreenPrompt.style.display = "none";   // Hide fullscreen
+        rotateScreen.style.display = "flex";
+        fullscreenPrompt.style.display = "none";
       } else {
-        rotateScreen.style.display = "none";       // Hide rotate
-        fullscreenPrompt.style.display = "flex";   // Show fullscreen
+        rotateScreen.style.display = "none";
+        fullscreenPrompt.style.display = "flex";
       }
     }
-function isIOS() {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent);
-}
-  function goFullscreen() {
+
+    function isIOS() {
+      return /iphone|ipad|ipod/i.test(navigator.userAgent);
+    }
+
+    function goFullscreen() {
       const elem = document.documentElement;
-	  if (isIOS()) {
+
+      if (isIOS()) {
         fullscreenPrompt.style.display = "none";
-} else {
-  console.log("🖥️ Not an iOS device");
-}
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
+        initializeUnity();
+      } else if (elem.requestFullscreen) {
+        elem.requestFullscreen().then(() => {
+          fullscreenPrompt.style.display = "none";
+          initializeUnity();
+        });
       } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
-      } else if (elem.mozRequestFullScreen) {
-        elem.mozRequestFullScreen();
-      } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
+        fullscreenPrompt.style.display = "none";
+        initializeUnity();
+      } else {
+        fullscreenPrompt.style.display = "none";
+        initializeUnity();
       }
     }
-document.addEventListener("fullscreenchange", () => {
+
+    document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement) {
         fullscreenPrompt.style.display = "none";
       }
     });
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(() => console.log("✅ Service Worker registered"))
-    .catch((err) => console.error("❌ SW failed", err));
-}
 
+    function initializeUnity() {
+      splash.style.display = "block";
+
+      createUnityInstance(canvas, config, (progress) => {
+        barFill.style.width = (progress * 100) + "%";
+      }).then((unityInstance) => {
+        splash.style.display = "none";
+      }).catch((message) => {
+        alert(message);
+      });
+    }
+
+    function isRunningStandalone() {
+      return (window.navigator.standalone === true)
+        || (window.matchMedia('(display-mode: standalone)').matches);
+    }
 
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("orientationchange", checkOrientation);
     checkOrientation();
-window.addEventListener('beforeinstallprompt', (e) => {
-  console.log("✅ beforeinstallprompt fired");
-});
 
-    // Unity loader
-    var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/Build.loader.js";
-    var config = {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      console.log("Install prompt available");
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install');
+          } else {
+            console.log('User dismissed install');
+          }
+          deferredPrompt = null;
+          installBtn.style.display = 'none';
+        });
+      }
+    });
+
+    if (isRunningStandalone()) {
+      console.log("✅ Running as a PWA (standalone mode)");
+      installBtn.style.display = "none";
+      fullscreenPrompt.style.display = "none";
+      initializeUnity();
+    } else {
+      console.log("❌ Running in the browser");
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Service Worker registered"))
+        .catch((err) => console.error("❌ SW failed", err));
+    }
+
+    // Unity config and loader setup
+    const buildUrl = "Build";
+    const loaderUrl = buildUrl + "/Build.loader.js";
+    const config = {
       dataUrl: buildUrl + "/Build.data",
       frameworkUrl: buildUrl + "/Build.framework.js",
       codeUrl: buildUrl + "/Build.wasm",
@@ -275,61 +316,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
       productVersion: "0.1",
     };
 
-    const canvas = document.querySelector("#unity-canvas");
     const script = document.createElement("script");
     script.src = loaderUrl;
     script.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        // optional loading bar here
-                barFill.style.width = (progress * 100) + "%";
-
-      }).then((unityInstance) => {
-        splash.style.display = "none";
-      }).catch((message) => {
-        alert(message);
-      });
+      // Unity initialized after fullscreen only
     };
-	let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
-
-// Listen for installable event
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  //installBtn.style.display = 'inline-flex'; // Make it visible
-  console.log("Install prompt available");
-});
-
-// On click, show the prompt
-installBtn.addEventListener('click', () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted install');
-      } else {
-        console.log('User dismissed install');
-      }
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    });
-  }
-});
-  if (isRunningStandalone()) {
-    console.log("✅ Running as a PWA (standalone mode)");
-    installBtn.style.display = "none"; // Hide the install button
-        fullscreenPrompt.style.display = "none";
-  } else {
-    console.log("❌ Running in the browser");
-  }
-
-function isRunningStandalone() {
-  return (window.navigator.standalone === true) // iOS Safari PWA
-      || (window.matchMedia('(display-mode: standalone)').matches); // Android & iOS newer
-}
-
     document.body.appendChild(script);
-	
   </script>
 </body>
 </html>
