@@ -204,6 +204,8 @@
   </button>
   <!-- ✅ Unity Loader Script -->
   <script>
+     const splash = document.querySelector("#LoadingSplash");
+    const barFill = document.querySelector("#custom-loading-bar-fill");
     const rotateScreen = document.getElementById("RotateWarningScreen");
     const fullscreenPrompt = document.getElementById("FullscreenPrompt");
 
@@ -274,8 +276,10 @@ window.addEventListener('beforeinstallprompt', (e) => {
     script.onload = () => {
       createUnityInstance(canvas, config, (progress) => {
         // optional loading bar here
+                barFill.style.width = (progress * 100) + "%";
+
       }).then((unityInstance) => {
-        // Unity ready
+        splash.style.display = "none";
       }).catch((message) => {
         alert(message);
       });
