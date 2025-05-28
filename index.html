@@ -105,12 +105,18 @@
   <div id="RotateWarningScreen">
     <img src="TemplateData/lg.png" alt="Rotate your device">
   </div>
-
+<button id="installBtn" style="display: none;">
+  <img src="TemplateData/install-icon.png" alt="Install" style="height: 24px; vertical-align: middle; margin-right: 8px;">
+  Add to Home Screen
+</button>
   <!-- ✅ شاشة الفول سكرين Landscape فقط -->
   <div id="FullscreenPrompt">
     <img src="TemplateData/fullscreen.png" alt="Logo" class="logo">
     <div id="fullscreen-prompt-box">
       <img src="TemplateData/Ficon.png" alt="Enter Fullscreen" onclick="goFullscreen()">
+     
+	 
+	  
       <span>For the best gaming experience, switch to full screen.</span>
     </div>
   </div>
@@ -184,6 +190,29 @@ document.addEventListener("fullscreenchange", () => {
       });
     };
     document.body.appendChild(script);
+	if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+
+    // Desktop PWA install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          }
+          deferredPrompt = null;
+          installBtn.style.display = 'none';
+        });
+      }
+    });
   </script>
 </body>
 </html>
