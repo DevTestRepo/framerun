@@ -164,9 +164,16 @@
         fullscreenPrompt.style.display = "flex";   // Show fullscreen
       }
     }
-
+function isIOS() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
   function goFullscreen() {
       const elem = document.documentElement;
+	  if (isIOS()) {
+        fullscreenPrompt.style.display = "none";
+} else {
+  console.log("🖥️ Not an iOS device");
+}
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
       } else if (elem.webkitRequestFullscreen) {
