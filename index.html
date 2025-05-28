@@ -171,12 +171,7 @@
 
 <body>
  <!-- ✅ Splash Screen with Loading -->
-  <div id="LoadingSplash">
-    <div id="loading-text"></div>
-    <div id="custom-loading-bar">
-      <div id="custom-loading-bar-fill"></div>
-    </div>
-  </div>
+  
   <!-- ✅ شاشة الروتيشن Portrait فقط -->
   <div id="RotateWarningScreen">
     <img src="TemplateData/lg.png" alt="Rotate your device">
@@ -194,6 +189,13 @@
     </div>
   </div>
 
+
+<div id="LoadingSplash">
+    <div id="loading-text"></div>
+    <div id="custom-loading-bar">
+      <div id="custom-loading-bar-fill"></div>
+    </div>
+  </div>
   <!-- ✅ Unity Canvas -->
   <div id="unity-container">
     <canvas id="unity-canvas"></canvas>
@@ -204,10 +206,11 @@
   </button>
   <!-- ✅ Unity Loader Script -->
   <script>
-     const splash = document.querySelector("#LoadingSplash");
-    const barFill = document.querySelector("#custom-loading-bar-fill");
+    
     const rotateScreen = document.getElementById("RotateWarningScreen");
     const fullscreenPrompt = document.getElementById("FullscreenPrompt");
+     const splash = document.querySelector("#LoadingSplash");
+    const barFill = document.querySelector("#custom-loading-bar-fill");
 
     function checkOrientation() {
       if (window.innerHeight > window.innerWidth) {
