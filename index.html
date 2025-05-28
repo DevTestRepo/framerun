@@ -247,6 +247,18 @@ installBtn.addEventListener('click', () => {
     });
   }
 });
+  if (isRunningStandalone()) {
+    console.log("✅ Running as a PWA (standalone mode)");
+    installBtn.style.display = "none"; // Hide the install button
+    fullscreenPrompt.style.display = "none"; // Optionally hide fullscreen message
+  } else {
+    console.log("❌ Running in the browser");
+  }
+
+function isRunningStandalone() {
+  return (window.navigator.standalone === true) // iOS Safari PWA
+      || (window.matchMedia('(display-mode: standalone)').matches); // Android & iOS newer
+}
 
     document.body.appendChild(script);
 	
