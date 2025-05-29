@@ -242,11 +242,22 @@
 
         });
 
-        window.addEventListener("fullscreenchange", () => {
-            if (document.fullscreenElement) {
+        function onFullscreenChange() {
+            const isFullscreen =
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement;
+
+            if (isFullscreen) {
                 fullscreenPrompt.style.display = "none";
             }
-        });
+        }
+
+        document.addEventListener("fullscreenchange", onFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+        document.addEventListener("mozfullscreenchange", onFullscreenChange);
+        document.addEventListener("MSFullscreenChange", onFullscreenChange);
 
         window.addEventListener("resize", checkOrientation);
         window.addEventListener("orientationchange", checkOrientation);
