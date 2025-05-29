@@ -1,314 +1,295 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>The Frame Run</title>
-  <link rel="shortcut icon" href="TemplateData/Icon.png">
-  <link rel="manifest" href="manifest.json">
+    <meta charset="utf-8">
+    <title>The Frame Run</title>
+    <link rel="shortcut icon" href="TemplateData/Icon.png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
+        #unity-container, #unity-canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
-    #unity-container {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+        #RotateWarningScreen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    #unity-canvas {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+            #RotateWarningScreen img {
+                max-width: 200px;
+            }
 
-    #RotateWarningScreen {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: black;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        #FullscreenPrompt {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
 
-    #RotateWarningScreen img {
-      max-width: 200px;
-    }
+            #FullscreenPrompt img.logo {
+                width: 80%;
+                max-width: 600px;
+                height: auto;
+                margin-bottom: 60px;
+                object-fit: contain;
+            }
 
-    #FullscreenPrompt {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-      z-index: 9998;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-    }
+        #fullscreen-prompt-box {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: center;
+            width: 100%;
+            font-size: 18px;
+        }
 
-    #FullscreenPrompt img.logo {
-      width: 80%;
-      max-width: 600px;
-      height: auto;
-      margin-bottom: 60px;
-      object-fit: contain;
-    }
+            #fullscreen-prompt-box img {
+                width: 48px;
+                height: 48px;
+                cursor: pointer;
+                transition: transform 0.2s ease;
+            }
 
-    #fullscreen-prompt-box {
-      position: absolute;
-      bottom: 40px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      justify-content: center;
-      width: 100%;
-      font-size: 18px;
-    }
+                #fullscreen-prompt-box img:hover {
+                    transform: scale(1.1);
+                }
 
-    #fullscreen-prompt-box img {
-      width: 48px;
-      height: 48px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+        #installBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            color: black;
+            border: none;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 9999;
+            display: none;
+        }
 
-    #fullscreen-prompt-box img:hover {
-      transform: scale(1.1);
-    }
+            #installBtn img {
+                height: 20px;
+                vertical-align: middle;
+                margin-right: 8px;
+            }
 
-    #installBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: white;
-      color: black;
-      border: none;
-      padding: 10px 16px;
-      font-size: 16px;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      cursor: pointer;
-      z-index: 9999;
-      align-items: center;
-      display: none;
-    }
+        #LoadingSplash {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url("TemplateData/Loading.png") no-repeat center center;
+            background-size: cover;
+        }
 
-    #installBtn img {
-      height: 20px;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
+        #loading-text {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
 
-    #LoadingSplash {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background: url("TemplateData/Loading.png") no-repeat center center;
-      background-size: cover;
-    }
+        #custom-loading-bar {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 20px;
+            background-color: #1f1f1f;
+            border-radius: 12px;
+            border: 2px solid white;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
 
-    #loading-text {
-      position: absolute;
-      bottom: 150px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 16px;
-      color: white;
-      text-shadow: 1px 1px 2px black;
-    }
-
-    #custom-loading-bar {
-      position: absolute;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40%;
-      height: 20px;
-      background-color: #1f1f1f;
-      border-radius: 12px;
-      border: 2px solid white;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-    }
-
-    #custom-loading-bar-fill {
-      width: 0%;
-      height: 100%;
-      background-color: #FFA500;
-      border-radius: 12px 0 0 12px;
-      transition: width 0.3s ease;
-    }
-  </style>
+        #custom-loading-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #FFA500;
+            border-radius: 12px 0 0 12px;
+            transition: width 0.3s ease;
+        }
+    </style>
 </head>
 
 <body>
 
-  <div id="RotateWarningScreen">
-    <img src="TemplateData/lg.png" alt="Rotate your device">
-  </div>
-
-  <div id="FullscreenPrompt">
-    <img src="TemplateData/fullscreen.png" alt="Logo" class="logo">
-    <div id="fullscreen-prompt-box">
-      <img src="TemplateData/Ficon.png" alt="Enter Fullscreen" onclick="goFullscreen()">
-      <span>For the best gaming experience, switch to full screen.</span>
+    <div id="RotateWarningScreen">
+        <img src="TemplateData/lg.png" alt="Rotate your device">
     </div>
-  </div>
 
-  <div id="LoadingSplash">
-    <div id="loading-text"></div>
-    <div id="custom-loading-bar">
-      <div id="custom-loading-bar-fill"></div>
+    <div id="FullscreenPrompt">
+        <img src="TemplateData/fullscreen.png" alt="Logo" class="logo">
+        <div id="fullscreen-prompt-box">
+            <img id="fullscreenBtn" src="TemplateData/Ficon.png" alt="Enter Fullscreen">
+            <span>For the best gaming experience, switch to full screen.</span>
+        </div>
     </div>
-  </div>
 
-  <div id="unity-container">
-    <canvas id="unity-canvas"></canvas>
-  </div>
+    <div id="LoadingSplash">
+        <div id="loading-text"></div>
+        <div id="custom-loading-bar">
+            <div id="custom-loading-bar-fill"></div>
+        </div>
+    </div>
 
-  <button id="installBtn">
-    <img src="TemplateData/install-icon.png" alt="Install">
-    Install The App
-  </button>
+    <div id="unity-container">
+        <canvas id="unity-canvas"></canvas>
+    </div>
 
-  <script>
-    const rotateScreen = document.getElementById("RotateWarningScreen");
-    const fullscreenPrompt = document.getElementById("FullscreenPrompt");
-    const splash = document.getElementById("LoadingSplash");
-    const barFill = document.getElementById("custom-loading-bar-fill");
+    <button id="installBtn">
+        <img src="TemplateData/install-icon.png" alt="Install">
+        Install The App
+    </button>
 
-    const canvas = document.getElementById("unity-canvas");
-    const installBtn = document.getElementById("installBtn");
-    let deferredPrompt;
+    <script>
+        const rotateScreen = document.getElementById("RotateWarningScreen");
+        const fullscreenPrompt = document.getElementById("FullscreenPrompt");
+        const splash = document.getElementById("LoadingSplash");
+        const barFill = document.getElementById("custom-loading-bar-fill");
+        const canvas = document.getElementById("unity-canvas");
+        const installBtn = document.getElementById("installBtn");
+        const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-    function checkOrientation() {
-      if (window.innerHeight > window.innerWidth) {
-        rotateScreen.style.display = "flex";
-        fullscreenPrompt.style.display = "none";
-      } else {
-        rotateScreen.style.display = "none";
-        fullscreenPrompt.style.display = "flex";
-      }
-    }
+        let initialized = false;
+        let deferredPrompt;
 
-    function isIOS() {
-      return /iphone|ipad|ipod/i.test(navigator.userAgent);
-    }
-
-    function goFullscreen() {
-        const elem = document.documentElement;
-        if (!initialized) {
-            initializeUnity();
+        function isIOS() {
+            return /iphone|ipad|ipod/i.test(navigator.userAgent);
         }
-      if (isIOS()) {
-        fullscreenPrompt.style.display = "none";
-      } else if (elem.requestFullscreen) {
-        elem.requestFullscreen().then(() => {
-          fullscreenPrompt.style.display = "none";
+
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                rotateScreen.style.display = "flex";
+                fullscreenPrompt.style.display = "none";
+            } else {
+                rotateScreen.style.display = "none";
+                fullscreenPrompt.style.display = "flex";
+            }
+        }
+
+        function initializeUnity() {
+            splash.style.display = "block";
+            createUnityInstance(canvas, config, (progress) => {
+                barFill.style.width = (progress * 100) + "%";
+            }).then((unityInstance) => {
+                splash.style.display = "none";
+                initialized = true;
+            }).catch((message) => {
+                alert(message);
+            });
+        }
+
+        fullscreenBtn.addEventListener("click", () => {
+            const elem = document.documentElement;
+            if (!initialized) {
+                initializeUnity();
+            }
+
+            if (isIOS()) {
+                fullscreenPrompt.style.display = "none";
+            } else if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => console.warn("Fullscreen failed:", err));
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
         });
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-        fullscreenPrompt.style.display = "none";
-      } else {
-        fullscreenPrompt.style.display = "none";
-      }
-    }
 
-    document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement) {
-        fullscreenPrompt.style.display = "none";
-      }
-    });
-      let initialized = false;
-    function initializeUnity() {
-      splash.style.display = "block";
-
-      createUnityInstance(canvas, config, (progress) => {
-        barFill.style.width = (progress * 100) + "%";
-      }).then((unityInstance) => {
-          splash.style.display = "none";
-          initialized = true;
-      }).catch((message) => {
-        alert(message);
-      });
-    }
-
-    window.addEventListener("resize", checkOrientation);
-    window.addEventListener("orientationchange", checkOrientation);
-    checkOrientation();
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      console.log("Install prompt available");
-    });
-
-    installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted install');
-          } else {
-            console.log('User dismissed install');
-          }
-          deferredPrompt = null;
-          installBtn.style.display = 'none';
+        document.addEventListener("fullscreenchange", () => {
+            if (document.fullscreenElement) {
+                fullscreenPrompt.style.display = "none";
+            }
         });
-      }
-    });
 
-  
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("orientationchange", checkOrientation);
+        checkOrientation();
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("✅ Service Worker registered"))
-        .catch((err) => console.error("❌ SW failed", err));
-    }
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'flex';
+        });
 
-    // Unity config and loader setup
-    const buildUrl = "Build";
-    const loaderUrl = buildUrl + "/Build.loader.js";
-    const config = {
-      dataUrl: buildUrl + "/Build.data",
-      frameworkUrl: buildUrl + "/Build.framework.js",
-      codeUrl: buildUrl + "/Build.wasm",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "Endless Runner",
-      productVersion: "0.1",
-    };
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                    } else {
+                        console.log('User dismissed install');
+                    }
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                });
+            }
+        });
 
-    const script = document.createElement("script");
-    script.src = loaderUrl;
-    script.onload = () => {
-      // Unity initialized after fullscreen only
-    };
-    document.body.appendChild(script);
-  </script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log("✅ Service Worker registered"))
+                .catch((err) => console.error("❌ SW failed", err));
+        }
+
+        const buildUrl = "Build";
+        const loaderUrl = buildUrl + "/Build.loader.js";
+        const config = {
+            dataUrl: buildUrl + "/Build.data",
+            frameworkUrl: buildUrl + "/Build.framework.js",
+            codeUrl: buildUrl + "/Build.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "DefaultCompany",
+            productName: "Endless Runner",
+            productVersion: "0.1",
+        };
+
+        const script = document.createElement("script");
+        script.src = loaderUrl;
+        document.body.appendChild(script);
+    </script>
 </body>
 </html>
