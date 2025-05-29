@@ -5,6 +5,7 @@
     <title>The Frame Run</title>
     <link rel="shortcut icon" href="TemplateData/Icon.png">
     <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
     <style>
         html, body {
             margin: 0;
@@ -266,7 +267,7 @@
         document.addEventListener("webkitfullscreenchange", onFullscreenChange);
         document.addEventListener("mozfullscreenchange", onFullscreenChange);
         document.addEventListener("MSFullscreenChange", onFullscreenChange);
-
+        document.body.classList.add("fullscreen-mode");
         window.addEventListener("resize", checkOrientation);
         window.addEventListener("orientationchange", checkOrientation);
         checkOrientation();
