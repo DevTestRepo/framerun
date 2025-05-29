@@ -236,6 +236,8 @@
             } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
             }
+            fullscreenPrompt.style.display = "none";
+
         });
 
         document.addEventListener("fullscreenchange", () => {
@@ -251,7 +253,7 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'flex';
+            //installBtn.style.display = 'flex';
         });
 
         installBtn.addEventListener('click', () => {
