@@ -234,10 +234,11 @@
                 fullscreenPrompt.style.display = "none";
             } else if (elem.requestFullscreen) {
                 elem.requestFullscreen().catch(err => console.warn("Fullscreen failed:", err));
+                fullscreenPrompt.style.display = "none";
             } else if (elem.webkitRequestFullscreen) {
+                fullscreenPrompt.style.display = "none";
                 elem.webkitRequestFullscreen();
             }
-            fullscreenPrompt.style.display = "none";
 
         });
 
