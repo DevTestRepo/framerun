@@ -68,7 +68,7 @@
         #fullscreen-prompt-box {
             position: absolute;
             bottom: 40px;
-            display: block;
+            display: flex;
             align-items: center;
             gap: 16px;
             justify-content: center;
@@ -207,9 +207,10 @@
                 fullscreenPrompt.style.display = "none";
             } else {
                 rotateScreen.style.display = "none";
-                fullscreenPrompt.style.display = "flex";
+                fullscreenPrompt.style.display = document.fullscreenElement ? "none" : "flex";
             }
         }
+
 
         function initializeUnity() {
             fullscreenPrompt.style.display = "none";
