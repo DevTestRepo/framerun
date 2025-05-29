@@ -220,23 +220,21 @@
     }
 
     function goFullscreen() {
-      const elem = document.documentElement;
-
+        const elem = document.documentElement;
+        if (!initialized) {
+            initializeUnity();
+        }
       if (isIOS()) {
         fullscreenPrompt.style.display = "none";
-        initializeUnity();
       } else if (elem.requestFullscreen) {
         elem.requestFullscreen().then(() => {
           fullscreenPrompt.style.display = "none";
-          initializeUnity();
         });
       } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
         fullscreenPrompt.style.display = "none";
-        initializeUnity();
       } else {
         fullscreenPrompt.style.display = "none";
-        initializeUnity();
       }
     }
 
@@ -245,14 +243,15 @@
         fullscreenPrompt.style.display = "none";
       }
     });
-
+      let initialized = false;
     function initializeUnity() {
       splash.style.display = "block";
 
       createUnityInstance(canvas, config, (progress) => {
         barFill.style.width = (progress * 100) + "%";
       }).then((unityInstance) => {
-        splash.style.display = "none";
+          splash.style.display = "none";
+          initialized = true;
       }).catch((message) => {
         alert(message);
       });
@@ -288,14 +287,7 @@
       }
     });
 
-    if (isRunningStandalone()) {
-      console.log("✅ Running as a PWA (standalone mode)");
-      installBtn.style.display = "none";
-      fullscreenPrompt.style.display = "none";
-      initializeUnity();
-    } else {
-      console.log("❌ Running in the browser");
-    }
+  
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
