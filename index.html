@@ -110,25 +110,18 @@
                 margin-right: 8px;
             }
 
-    #LoadingSplash {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 9999;
-    background-color: black; /* fallback background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        #LoadingSplash {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url("TemplateData/Loading.png") no-repeat center center;
+            background-size: cover;
+        }
 
-#LoadingSplash img {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-}
         #loading-text {
             position: absolute;
             bottom: 150px;
@@ -183,13 +176,12 @@
 </div>
     </div>
 
-   <div id="LoadingSplash">
-    <img src="TemplateData/Loading.png" alt="Loading">
-    <div id="loading-text"></div>
-    <div id="custom-loading-bar">
-        <div id="custom-loading-bar-fill"></div>
+    <div id="LoadingSplash">
+        <div id="loading-text"></div>
+        <div id="custom-loading-bar">
+            <div id="custom-loading-bar-fill"></div>
+        </div>
     </div>
-</div>
 
     <div id="unity-container">
         <canvas id="unity-canvas"></canvas>
