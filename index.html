@@ -111,26 +111,30 @@
                 margin-right: 8px;
             }
 
-#loading-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: fill; /* force image to stretch to exactly fit screen */
-  object-position: center;
-  z-index: 0;
-}
 #LoadingSplash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 9999;
-  background-color: black;
-  overflow: hidden;
+    position: fixed;
+    inset: 0; /* top, right, bottom, left = 0 */
+    z-index: 9997;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
+
+#loading-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+}
+
 
 
 
