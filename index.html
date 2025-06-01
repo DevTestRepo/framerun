@@ -110,26 +110,27 @@
                 margin-right: 8px;
             }
 
-  #LoadingSplash {
-    display: none;
+#LoadingSplash {
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 9997; /* keep below rotate & fullscreen prompts */
+    z-index: 9997;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
     overflow: hidden;
-    background-color: black; /* fallback */
 }
 
 #loading-image {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover; /* fully fills the screen without distortion */
-    pointer-events: none; /* so it doesn't block interaction */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     z-index: 0;
 }
 
@@ -197,6 +198,7 @@
     <div id="custom-loading-bar-fill"></div>
   </div>
 </div>
+
 
     <div id="unity-container">
         <canvas id="unity-canvas"></canvas>
