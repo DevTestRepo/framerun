@@ -168,14 +168,13 @@
   .overlay-title {
   position: absolute;
   z-index: 10;
-  top: 4vh; /* slightly higher on smaller screens */
+  top: 4vh;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  max-width: 600px;
-  max-height: 40vh; /* 🧠 key fix for landscape view */
+  width: auto;
   height: auto;
-  object-fit: contain;
+  max-width: 100%;
+  max-height: 80vh; /* ensures it never exceeds screen height */
 }
     .overlay-logo {
       position: absolute;
