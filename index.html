@@ -165,16 +165,18 @@
       transition: width 0.3s ease;
     }
 
-   .overlay-title {
-      position: absolute;
-      z-index: 10;
-      top: 8vh;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80%;
-      max-width: 800px;
-    }
-
+  .overlay-title {
+  position: absolute;
+  z-index: 10;
+  top: 4vh; /* slightly higher on smaller screens */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  max-height: 40vh; /* 🧠 key fix for landscape view */
+  height: auto;
+  object-fit: contain;
+}
     .overlay-logo {
       position: absolute;
       bottom: 2vh;
@@ -194,11 +196,12 @@
       object-fit: cover;
     }
 
-    @media (max-width: 480px) {
+  @media (max-height: 400px) {
   .overlay-title {
-    width: 90vw;
-    max-width: 300px;
+    max-height: 30vh;
+    top: 2vh;
   }
+}
 
   .overlay-logo {
     width: 12vw;
